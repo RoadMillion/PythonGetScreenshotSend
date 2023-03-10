@@ -7,6 +7,8 @@ from email.mime.text import MIMEText
 from PIL import ImageGrab
 from threading import Timer
 import time
+import os
+import schedule
 
 # 线程间隔
 timer_interval = 1
@@ -51,12 +53,21 @@ def send_mail(tolist, sub):
         return False
 
 
-def getDesktopimg():
+last_image_name = None
+
+
+def get_desktop_img():
     # 当前日期和时间并格式化
     now = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     filename = now + ".png"
     im = ImageGrab.grab()  # 截取桌面图片
     im.save(filename)  # 保存为test2.png
+    print("save new image: %s" % filename)
+    global last_image_name
+    if last_image_name:
+        os.remove(last_image_name)
+        print("remove last image: %s" % last_image_name)
+    last_image_name = filename
     return filename
 
 
@@ -66,11 +77,18 @@ def delayrun():
 
 t = Timer(timer_interval, delayrun)
 t.start()
-# 延时
-while True:
-    # sleep 10 seconds
-    time.sleep(10)
-    img_name = getDesktopimg()
+
+
+def job():
+    img_name = get_desktop_img()
     print('shoot desktop image: %s' % img_name)
     send_mail(mailto_list, img_name)
     print('send email success')
+
+
+# 每天下午5点执行
+schedule.every().day.at("10:25").do(job)
+print("job start")
+while True:
+    schedule.run_pending()
+    time.sleep(1)
