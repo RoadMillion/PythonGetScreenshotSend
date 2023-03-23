@@ -14,10 +14,10 @@ import schedule
 timer_interval = 1
 
 # 邮箱相关配置
-mailto_list = ['yulechuan@yazuishou.com']  # 接受邮箱
+mailto_list = ['xxxxx']  # 接受邮箱
 mail_host = "smtp.exmail.qq.com"  # 发送邮箱smtp服务器
-mail_user = "yulechuan@yazuishou.com"  # 发送邮箱
-mail_pass = "Yu4837563845"  # 发送邮箱密码
+mail_user = "xxxxxx"  # 发送邮箱
+mail_pass = "xxxxxx"  # 发送邮箱密码
 
 
 # 发送邮件函数
